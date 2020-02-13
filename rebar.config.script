@@ -17,12 +17,23 @@ Config1 = case lists:keyfind(erl_opts, 1, CONFIG) of
         CONFIG ++ [{erl_opts, ErlOpts}]
 end,
 
-case os:cmd("echo 'int main(int argc, char *argv[]) {return 0;}' | cc -c -x c -o /dev/null -flto -") of
-    [] ->
-        Config1;
+case os:type() of
+    {unix, _} ->
+        CC = case os:getenv("CC") of
+            false -> "cc";
+            Else -> Else
+        end,
+        FLTO_CHECK = "echo 'int main(int argc, char *argv[]) {return 0;}' | "
+                ++ CC ++ " -c -x c -o /dev/null -flto -",
+        case os:cmd(FLTO_CHECK) of
+            [] ->
+                {port_env, PortEnv} = lists:keyfind(port_env, 1, Config1),
+                NewFlag = {".*", "FLTO_FLAG", "-flto"},
+                NewPortEnv = lists:keyreplace("FLTO_FLAG", 2, PortEnv, NewFlag),
+                lists:keyreplace(port_env, 1, Config1, {port_env, NewPortEnv});
+            _ ->
+                Config1
+        end;
     _ ->
-        {port_env, PortEnv} = lists:keyfind(port_env, 1, Config1),
-        NewFlag = {".*", "FLTO_FLAG", ""},
-        NewPortEnv = lists:keyreplace("FLTO_FLAG", 2, PortEnv, NewFlag),
-        lists:keyreplace(port_env, 1, Config1, {port_env, NewPortEnv})
+        Config1
 end.
