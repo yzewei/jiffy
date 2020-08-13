@@ -1,33 +1,28 @@
-REBAR?=./rebar
+## shallow clone for speed
+REBAR_GIT_CLONE_OPTIONS += --depth 1
+export REBAR_GIT_CLONE_OPTIONS
 
+REBAR = rebar3
+all: compile
 
-all: build
-
+compile:
+	$(REBAR) compile
 
 clean:
 	$(REBAR) clean
-	rm -rf logs
-	rm -rf .eunit
-	rm -f test/*.beam
 
+ct: compile
+	$(REBAR) as test ct
 
-distclean: clean
-	git clean -fxd
+eunit: compile
+	$(REBAR) as test eunit
 
+xref:
+	$(REBAR) xref
 
-build:
-	$(REBAR) compile
+cover:
+	$(REBAR) cover
 
-
-eunit:
-	$(REBAR) eunit skip_deps=true
-
-
-check: build eunit
-
-
-%.beam: %.erl
-	erlc -o test/ $<
-
-
-.PHONY: all clean distclean depends build etap eunit check
+distclean:
+	@rm -rf _build
+	@rm -f data/app.*.config data/vm.*.args rebar.lock
