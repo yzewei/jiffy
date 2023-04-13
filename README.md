@@ -1,12 +1,10 @@
-Jiffy - JSON NIFs for Erlang
+Jiffy - JSON NIFs for Erlang [![Run test cases](https://github.com/emqx/jiffy/actions/workflows/run_test_cases.yaml/badge.svg)](https://github.com/emqx/jiffy/actions/workflows/run_test_cases.yaml)
 ============================
 
 A JSON parser as a NIF. This is a complete rewrite of the work I did
 in EEP0018 that was based on Yajl. This new version is a hand crafted
 state machine that does its best to be as quick and efficient as
 possible while not placing any constraints on the parsed JSON.
-
-[![Build Status](https://travis-ci.org/davisp/jiffy.svg?branch=master)](https://travis-ci.org/davisp/jiffy)
 
 Usage
 -----
