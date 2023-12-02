@@ -28,15 +28,15 @@ jobs:
     strategy:
       matrix:
         builder:
-          - 5.0-33
+          - 5.2-7
         otp:
-          - 24.3.4.2-3
+          - 26.1.2-1
         elixir:
-          - 1.13.4
+          - 1.15.7
         arch:
           - amd64
           - arm64
-        os: 
+        os:
           - ubuntu22.04
           - ubuntu20.04
           - ubuntu18.04
@@ -48,7 +48,7 @@ jobs:
           - el8
           - el7
           - amzn2
-  
+
     steps:
     - uses: actions/checkout@v3
     - uses: docker/setup-buildx-action@v2

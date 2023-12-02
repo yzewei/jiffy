@@ -3,6 +3,7 @@
 
 -module(jiffy).
 -export([decode/1, decode/2, encode/1, encode/2]).
+-export_type([decode_options/0, encode_options/0]).
 -define(NOT_LOADED, not_loaded(?LINE)).
 
 -compile([no_native]).
